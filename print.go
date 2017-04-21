@@ -6,16 +6,11 @@ import (
 )
 
 const (
-	//GREEN Color
-	green = "\x1b[32m"
-	//RED Color
-	red = "\x1b[31m"
-	//RESET Color
-	reset = "\033[0m"
-	//YELLOW Color
+	green  = "\x1b[32m"
+	red    = "\x1b[31m"
+	reset  = "\033[0m"
 	yellow = "\x1b[33m"
-	//BLUE Color
-	blue = "\x1b[34m"
+	blue   = "\x1b[34m"
 )
 
 //Goodf printf results
