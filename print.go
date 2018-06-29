@@ -2,6 +2,7 @@ package print
 
 import (
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -69,4 +70,34 @@ func Warningln(v ...interface{}) {
 	output := fmt.Sprintf("%s[!]%s", yellow, reset)
 	v = append([]interface{}{output}, v...)
 	fmt.Fprintln(os.Stdout, v...)
+}
+
+//Debugf prints a debug statement in prinf format
+func Debugf(debugging bool, w *io.Writer) func(format string, v ...interface{}) {
+	return func(format string, v ...interface{}) {
+		if debugging {
+			output := fmt.Sprintf("[Debug] ")
+			output += format
+			fmt.Fprintf((*w), output, v...)
+		}
+	}
+}
+
+//Debugln prints a debug statement in println format
+func Debugln(debugging bool, w *io.Writer) func(v ...interface{}) {
+	return func(v ...interface{}) {
+		if debugging {
+			output := fmt.Sprintf("[Debug] ")
+			v = append([]interface{}{output}, v...)
+			fmt.Fprintln((*w), v...)
+		}
+	}
+}
+
+//Error for writing an error to a io writer
+func Error(w *io.Writer) func(v error) {
+	return func(v error) {
+		output := fmt.Sprintf("[Error] ")
+		fmt.Fprintln((*w), output, v)
+	}
 }
