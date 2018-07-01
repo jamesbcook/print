@@ -75,6 +75,9 @@ func Warningln(v ...interface{}) {
 //Debugf prints a debug statement in prinf format
 func Debugf(debugging bool, w *io.Writer) func(format string, v ...interface{}) {
 	return func(format string, v ...interface{}) {
+		if !writerValid(w) {
+			return
+		}
 		if debugging {
 			output := fmt.Sprintf("[Debug] ")
 			output += format
@@ -86,6 +89,9 @@ func Debugf(debugging bool, w *io.Writer) func(format string, v ...interface{}) 
 //Debugln prints a debug statement in println format
 func Debugln(debugging bool, w *io.Writer) func(v ...interface{}) {
 	return func(v ...interface{}) {
+		if !writerValid(w) {
+			return
+		}
 		if debugging {
 			output := fmt.Sprintf("[Debug] ")
 			v = append([]interface{}{output}, v...)
@@ -97,7 +103,20 @@ func Debugln(debugging bool, w *io.Writer) func(v ...interface{}) {
 //Error for writing an error to a io writer
 func Error(w *io.Writer) func(v error) {
 	return func(v error) {
+		if !writerValid(w) {
+			return
+		}
 		output := fmt.Sprintf("[Error] ")
 		fmt.Fprintln((*w), output, v)
+	}
+}
+
+func writerValid(w *io.Writer) bool {
+	if w == nil {
+		return false
+	} else if (*w) == nil {
+		return false
+	} else {
+		return true
 	}
 }
